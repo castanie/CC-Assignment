@@ -21,7 +21,8 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter:5.9.1'
 
     // This dependency is used by the application.
-    implementation 'com.google.guava:guava:31.1-jre'
+    implementation 'org.jsoup:jsoup:1.15.4'
+    implementation 'com.deepl.api:deepl-java:1.1.0'
 }
 
 application {
