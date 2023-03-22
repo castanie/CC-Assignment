@@ -11,7 +11,12 @@ public class App {
     public static void main(String[] args) {
         System.out.println(new App().getGreeting());
 
+        UserInput userInput = UserInput.getUserInput();
+
+
+
         // Check commamnd line arguments (valid url, depth is number, ...):
+
 
         // Main recursive function:
 
