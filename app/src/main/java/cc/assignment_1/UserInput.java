@@ -20,23 +20,56 @@ public class UserInput {
         return userInput;
     }
 
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public int getDepth() {
+        return depth;
+    }
+
+    public void setDepth(int depth) {
+        this.depth = depth;
+    }
+
+    public String getTargetLanguage() {
+        return targetLanguage;
+    }
+
+    public void setTargetLanguage(String targetLanguage) {
+        this.targetLanguage = targetLanguage;
+    }
+
     public void readUserInput(){
         Scanner scanner = new Scanner(System.in);
 
+        readUrl(scanner);
+        readDepth(scanner);
+        readLanguage(scanner);
+    }
+
+    private void readUrl(Scanner scanner){
         System.out.println("Enter URL: ");
         url = scanner.nextLine();
-
         while(!urlIsValid(url)){
             System.out.println("Invalid Input. Enter URL: ");
             url = scanner.nextLine();
         }
+    }
 
+    private void readDepth(Scanner scanner){
         while(!depthIsValid(depth)){
             System.out.println("Enter depth: ");
             depth = scanner.nextInt();
             scanner.nextLine();
         }
+    }
 
+    private void readLanguage(Scanner scanner){
         while(!targetLanguageIsValid(targetLanguage)){
             System.out.println(("Enter target language: "));
             targetLanguage = scanner.nextLine();
@@ -52,18 +85,23 @@ public class UserInput {
 
     private boolean urlExists(String url) {
         try {
-            new URL(url).toURI();
-            URL urlObject = new URL(url);
-            HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
-            connection.setRequestMethod("HEAD");
-            int response = connection.getResponseCode();
-            if(response == HttpURLConnection.HTTP_OK){
+            if(connectToUrl(url) == HttpURLConnection.HTTP_OK){
                 return true;
             }
             return false;
         } catch (URISyntaxException | IOException e) {
             return false;
         }
+    }
+
+    public int connectToUrl(String url) throws URISyntaxException, IOException{
+        new URL(url).toURI();
+        URL urlObject = new URL(url);
+
+        HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
+        connection.setRequestMethod("HEAD");
+
+        return connection.getResponseCode();
     }
 
     private boolean depthIsValid(int depth){
