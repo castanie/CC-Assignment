@@ -84,6 +84,7 @@ public class UserInput {
     }
 
     private boolean urlExists(String url) {
+        url = addProtocolIfMissing(url);
         try {
             if(connectToUrl(url) == HttpURLConnection.HTTP_OK){
                 return true;
@@ -94,7 +95,16 @@ public class UserInput {
         }
     }
 
-    public int connectToUrl(String url) throws URISyntaxException, IOException{
+    private String addProtocolIfMissing(String url){
+
+        if(!url.matches("^(https?)://.*$")){
+            url = "http://" + url;
+        }
+
+        return url;
+    }
+
+    private int connectToUrl(String url) throws URISyntaxException, IOException{
         new URL(url).toURI();
         URL urlObject = new URL(url);
 
