@@ -52,7 +52,7 @@ public class UserInput {
         readLanguage(scanner);
     }
 
-    private void readUrl(Scanner scanner){
+    protected void readUrl(Scanner scanner){
         System.out.println("Enter URL: ");
         url = scanner.nextLine();
         while(!urlIsValid(url)){
@@ -61,7 +61,7 @@ public class UserInput {
         }
     }
 
-    private void readDepth(Scanner scanner){
+    protected void readDepth(Scanner scanner){
         while(!depthIsValid(depth)){
             System.out.println("Enter depth: ");
             depth = scanner.nextInt();
@@ -69,21 +69,21 @@ public class UserInput {
         }
     }
 
-    private void readLanguage(Scanner scanner){
+    protected void readLanguage(Scanner scanner){
         while(!targetLanguageIsValid(targetLanguage)){
             System.out.println(("Enter target language: "));
             targetLanguage = scanner.nextLine();
         }
     }
 
-    private boolean urlIsValid(String url){
+    protected boolean urlIsValid(String url){
         if(url==null){
             return false;
         }
         return (urlExists(url));
     }
 
-    private boolean urlExists(String url) {
+    protected boolean urlExists(String url) {
         url = addProtocolIfMissing(url);
         try {
             if(connectToUrl(url) == HttpURLConnection.HTTP_OK){
@@ -95,7 +95,7 @@ public class UserInput {
         }
     }
 
-    private String addProtocolIfMissing(String url){
+    protected String addProtocolIfMissing(String url){
 
         if(!url.matches("^(https?)://.*$")){
             url = "http://" + url;
@@ -104,7 +104,7 @@ public class UserInput {
         return url;
     }
 
-    private int connectToUrl(String url) throws URISyntaxException, IOException{
+    protected int connectToUrl(String url) throws URISyntaxException, IOException{
         new URL(url).toURI();
         URL urlObject = new URL(url);
 
@@ -114,14 +114,14 @@ public class UserInput {
         return connection.getResponseCode();
     }
 
-    private boolean depthIsValid(int depth){
+    protected boolean depthIsValid(int depth){
         if(depth<1 || depth >100){
             return false;
         }
         return true;
     }
 
-    private boolean targetLanguageIsValid(String targetLanguage){
+    protected boolean targetLanguageIsValid(String targetLanguage){
         //TODO: only allow languages that actually exist
         if(targetLanguage == null || targetLanguage.length()==0){
             return false;
