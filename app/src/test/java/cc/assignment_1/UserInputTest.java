@@ -21,12 +21,10 @@ class UserInputTest {
         userInput = UserInput.getUserInput();
     }
 
-
-    private void setUptTestReadUrlValid(){
+    private void setUptTestReadUrlValid() {
         System.setIn(new ByteArrayInputStream("https://www.google.at".getBytes()));
         userInput.readUrl(new Scanner(System.in));
     }
-
 
     @Test
     void testReadUrlValid() {
@@ -34,94 +32,94 @@ class UserInputTest {
         assertEquals("https://www.google.at", userInput.getUrl());
     }
 
-    private void setUpTestReadUrlInvalidThenValid(){
+    private void setUpTestReadUrlInvalidThenValid() {
         System.setIn(new ByteArrayInputStream("https://at.google.www\nhttps://www.google.at".getBytes()));
         userInput.readUrl(new Scanner(System.in));
     }
 
     @Test
-    void testReadUrlInvalidThenValid(){
+    void testReadUrlInvalidThenValid() {
+        setUpTestReadUrlInvalidThenValid();
         assertEquals("https://www.google.at", userInput.getUrl());
     }
 
-
-    private void setUpTestReadDepthValid(){
+    private void setUpTestReadDepthValid() {
         System.setIn(new ByteArrayInputStream("3".getBytes()));
         userInput.readDepth(new Scanner(System.in));
     }
+
     @Test
-    void testReadDepthValid(){
+    void testReadDepthValid() {
         setUpTestReadDepthValid();
         assertEquals(3, userInput.getDepth());
     }
 
-    private void setUpTestReadDepthInvalidThenValid(){
+    private void setUpTestReadDepthInvalidThenValid() {
         System.setIn(new ByteArrayInputStream("0\n3".getBytes()));
         userInput.readDepth(new Scanner(System.in));
-
-
     }
+
     @Test
-    void testReadDepthInvalidThenValid(){
+    void testReadDepthInvalidThenValid() {
         setUpTestReadDepthInvalidThenValid();
         assertEquals(3, userInput.getDepth());
     }
 
-    private void setUpTestReadLanguageValid(){
+    private void setUpTestReadLanguageValid() {
         System.setIn(new ByteArrayInputStream("English".getBytes()));
         userInput.readDepth(new Scanner(System.in));
     }
 
     @Test
-    void testReadLanguageValid(){
+    void testReadLanguageValid() {
         setUpTestReadLanguageValid();
         assertEquals("German", userInput.getTargetLanguage());
     }
 
-    private void setUpTestReadLanguageInvalidThenValid(){
+    private void setUpTestReadLanguageInvalidThenValid() {
         userInput.setTargetLanguage(null);
         System.setIn(new ByteArrayInputStream("\nEnglish".getBytes()));
         userInput.readLanguage(new Scanner(System.in));
     }
 
     @Test
-    void testReadLanguageInvalidThenValid(){
+    void testReadLanguageInvalidThenValid() {
         setUpTestReadLanguageInvalidThenValid();
         assertEquals("English", userInput.getTargetLanguage());
     }
 
     @Test
-    void testUrlIsValid(){
+    void testUrlIsValid() {
         assertTrue(userInput.urlIsValid("www.google.at"));
     }
 
     @Test
-    void testUrlIsValidNull(){
+    void testUrlIsValidNull() {
         assertFalse(userInput.urlIsValid(null));
     }
 
     @Test
-    void testUrlIsValidFalse(){
+    void testUrlIsValidFalse() {
         assertFalse((userInput.urlIsValid("asdf")));
     }
 
     @Test
-    void testUrlExistsTrue(){
+    void testUrlExistsTrue() {
         assertTrue(userInput.urlExists("https://www.google.at"));
     }
 
     @Test
-    void testUrlExistsFalse(){
+    void testUrlExistsFalse() {
         assertFalse(userInput.urlExists("https://at.google.www"));
     }
 
     @Test
-    void testAddProtocolIfMissing(){
+    void testAddProtocolIfMissing() {
         assertEquals("http://www.google.at", userInput.addProtocolIfMissing("www.google.at"));
     }
 
     @Test
-    void testAddProtocolIfMissingNotMissing(){
+    void testAddProtocolIfMissingNotMissing() {
         assertEquals("https://www.google.at", userInput.addProtocolIfMissing("https://www.google.at"));
     }
 
@@ -138,32 +136,32 @@ class UserInputTest {
     }
 
     @Test
-    void testDepthIsValid(){
+    void testDepthIsValid() {
         assertTrue(userInput.depthIsValid(4));
     }
 
     @Test
-    void testDepthIsValidTooSmall(){
+    void testDepthIsValidTooSmall() {
         assertFalse(userInput.depthIsValid(0));
     }
 
     @Test
-    void testDepthIsValidTooBig(){
+    void testDepthIsValidTooBig() {
         assertFalse(userInput.depthIsValid(101));
     }
 
     @Test
-    void testTargetLanguageIsValid(){
+    void testTargetLanguageIsValid() {
         assertTrue(userInput.targetLanguageIsValid("German"));
     }
 
     @Test
-    void testTargetLanguageIsValidNull(){
+    void testTargetLanguageIsValidNull() {
         assertFalse(userInput.targetLanguageIsValid(null));
     }
 
     @Test
-    void testTargetLanguageIsValidEmpty(){
+    void testTargetLanguageIsValidEmpty() {
         assertFalse(userInput.targetLanguageIsValid(""));
     }
 
