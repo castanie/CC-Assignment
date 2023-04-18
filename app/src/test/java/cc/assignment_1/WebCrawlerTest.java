@@ -13,7 +13,7 @@ public class WebCrawlerTest {
 
         @BeforeEach
         protected void beforeEach() {
-            this.webCrawler = new WebCrawler("https://www.wikipedia.org/");
+            this.webCrawler = new WebCrawler("https://www.wikipedia.org/", 3);
         }
 
         @Test

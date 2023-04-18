@@ -3,7 +3,13 @@
  */
 package cc.assignment_1;
 
+import com.deepl.api.Translator;
+import com.deepl.api.TranslatorOptions;
+
 public class App {
+    //public static String translatorAuthKey = "";
+    //public static Translator translator = new Translator(translatorAuthKey, new TranslatorOptions());
+
     public String getGreeting() {
         return "Hello World!";
     }
@@ -13,6 +19,8 @@ public class App {
 
         UserInput userInput = UserInput.getUserInput();
 
+        WebCrawler webCrawler = new WebCrawler(userInput.getUrl(), userInput.getDepth());
+        //webCrawler.crawl();
 
 
         // Check commamnd line arguments (valid url, depth is number, ...):
@@ -20,31 +28,31 @@ public class App {
 
         // Main recursive function:
 
-            // Get document contents (GET request):
+        // Get document contents (GET request):
 
-            // Parse file to get <a> and <h*> tags:
+        // Parse file to get <a> and <h*> tags:
 
-            // Write summary of <h*> tags to StringBuilder:
+        // Write summary of <h*> tags to StringBuilder:
 
-                // Concatenate all <h*> tags:
+        // Concatenate all <h*> tags:
 
-                // Translate <h*> tags using DeepL:
+        // Translate <h*> tags using DeepL:
 
-                    // Send API call to "api-free.deepl.com":
+        // Send API call to "api-free.deepl.com":
 
-                    // Read response:
+        // Read response:
 
-            // For each <a> tag:
+        // For each <a> tag:
 
-                // Send HEAD request to check for broken links:
+        // Send HEAD request to check for broken links:
 
-                    // Write broken link (<s>...</s>) and return:
+        // Write broken link (<s>...</s>) and return:
 
-                // If not broken:
+        // If not broken:
 
-                    // Write link to StringBuilder:
+        // Write link to StringBuilder:
 
-                    // Write output of recursive call to StringBuilder (include current indentation level):
+        // Write output of recursive call to StringBuilder (include current indentation level):
 
     }
 }

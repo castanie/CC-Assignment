@@ -5,9 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
 import java.util.Scanner;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -101,38 +98,6 @@ class UserInputTest {
     @Test
     void testUrlIsValidFalse() {
         assertFalse((userInput.urlIsValid("asdf")));
-    }
-
-    @Test
-    void testUrlExistsTrue() {
-        assertTrue(userInput.urlExists("https://www.google.at"));
-    }
-
-    @Test
-    void testUrlExistsFalse() {
-        assertFalse(userInput.urlExists("https://at.google.www"));
-    }
-
-    @Test
-    void testAddProtocolIfMissing() {
-        assertEquals("http://www.google.at", userInput.addProtocolIfMissing("www.google.at"));
-    }
-
-    @Test
-    void testAddProtocolIfMissingNotMissing() {
-        assertEquals("https://www.google.at", userInput.addProtocolIfMissing("https://www.google.at"));
-    }
-
-    @Test
-    void testConnectToUrl() throws URISyntaxException, IOException {
-        assertEquals(HttpURLConnection.HTTP_OK, userInput.connectToUrl("https://www.google.at"));
-    }
-
-    @Test
-    void testConnectToUrlException() {
-        assertThrows(Exception.class, () -> userInput.connectToUrl("https://at.google.www"));
-        assertThrows(Exception.class, () -> userInput.connectToUrl("asdf"));
-        assertThrows(Exception.class, () -> userInput.connectToUrl(""));
     }
 
     @Test

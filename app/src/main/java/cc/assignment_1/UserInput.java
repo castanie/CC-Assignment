@@ -1,9 +1,5 @@
 package cc.assignment_1;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.Scanner;
 
 public class UserInput {
@@ -72,34 +68,8 @@ public class UserInput {
         if (url == null) {
             return false;
         }
-        return (urlExists(url));
-    }
-
-    protected boolean urlExists(String url) {
-        url = addProtocolIfMissing(url);
-        try {
-            if (connectToUrl(url) == HttpURLConnection.HTTP_OK) {
-                return true;
-            }
-            return false;
-        } catch (URISyntaxException | IOException e) {
-            return false;
-        }
-    }
-
-    protected String addProtocolIfMissing(String url) {
-        if (!url.matches("^(https?)://.*$")) {
-            url = "http://" + url;
-        }
-        return url;
-    }
-
-    protected int connectToUrl(String url) throws URISyntaxException, IOException {
-        new URL(url).toURI();
-        URL urlObject = new URL(url);
-        HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
-        connection.setRequestMethod("HEAD");
-        return connection.getResponseCode();
+        URLValidator urlValidator = new URLValidator(url);
+        return urlValidator.urlIsValid();
     }
 
     protected boolean depthIsValid(int depth) {
