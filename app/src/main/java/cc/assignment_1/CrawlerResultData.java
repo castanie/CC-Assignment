@@ -25,6 +25,10 @@ public class CrawlerResultData {
         this.children = new ArrayList<>();
     }
 
+    public String getUrl() {
+        return url;
+    }
+
     public boolean isBroken() {
         return isBroken;
     }
