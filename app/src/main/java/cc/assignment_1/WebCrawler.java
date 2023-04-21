@@ -16,50 +16,53 @@ public class WebCrawler {
         this.startingPageNode = new CrawlerResultNode(url, false);
     }
 
-    public CrawlerResultNode crawl() {
-        crawlRecursively(this.startingPageNode, 1);
+    public CrawlerResultNode crawl() { //inits crawler recursion
+        crawl(this.startingPageNode, 1);
         return startingPageNode;
     }
 
-    public void crawlRecursively(CrawlerResultNode currentPage, int currentDepth) {
+    public void crawl(CrawlerResultNode currentPage, int currentDepth) {
         visitedPages.add(currentPage.getUrl());
 
         if (currentPage.isBroken()) {
             return;
         }
 
+        //just for testing purposes:
         System.out.println();
         System.out.println("______________________________________________________________________________");
         System.out.println("Searching Page: " + currentPage.getUrl() + " with current depth " + currentDepth);
         System.out.println("______________________________________________________________________________");
         System.out.println();
 
+        parseContent(currentPage);
 
-        //1) HANDLE CURRENT PAGE
-        Document doc = getDocument(currentPage.getUrl());
-        if (doc != null) {
-            currentPage.setHeaders(searchHeaders(doc));
-            currentPage.setLinks(searchLinks(doc));
+        if (currentDepth < maxDepth) {
+            crawlLinksRecursively(currentPage, currentDepth);
         }
+    }
 
-        //TODO: Translate headers
-
-
-        //2) CHECK TERMINATION CONDITIONS
-
-        if (currentDepth >= maxDepth) {
-            return;
-        }
-
-        //3) CRAWL RECURSIVELY
-        for (String link : currentPage.getLinks()
+    private void crawlLinksRecursively(CrawlerResultNode node, int currentDepth) {
+        for (String link : node.getLinks()
         ) {
             if (!visitedPages.contains(link)) {
                 CrawlerResultNode child = new CrawlerResultNode(link, !new URLValidator(link).urlIsValid());
-                currentPage.addChild(child);
-                crawlRecursively(child, currentDepth + 1);
+                node.addChild(child);
+                visitedPages.add(link);
+                crawl(child, currentDepth + 1);
             }
         }
+    }
+
+    private CrawlerResultNode parseContent(CrawlerResultNode node) {
+        Document doc = getDocument(node.getUrl());
+
+        if (doc != null) {
+            node.setHeaders(searchHeaders(doc));
+            node.setLinks(searchLinks(doc));
+        }
+
+        return node;
     }
 
     private ArrayList<String> searchLinks(Document document) {
