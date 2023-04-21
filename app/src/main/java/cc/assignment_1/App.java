@@ -20,7 +20,7 @@ public class App {
         UserInput userInput = UserInput.getUserInput();
 
         WebCrawler webCrawler = new WebCrawler(userInput.getUrl(), userInput.getDepth());
-        //webCrawler.crawl();
+        webCrawler.crawl();
 
 
         // Check commamnd line arguments (valid url, depth is number, ...):

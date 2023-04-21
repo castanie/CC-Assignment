@@ -6,6 +6,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.select.NodeVisitor;
 
+import java.util.ArrayList;
+
 public class WebCrawler {
     private final String url;
     private final int maxDepth;
@@ -30,9 +32,13 @@ public class WebCrawler {
     public void crawlRecursively(CrawlerResultData currentCrawlerResultData, int currentDepth) {
 
         //1) HANDLE CURRENT PAGE (TODO)
+        crawlDocument();
+
         //get doc;
-        //parse file & extract headers and links & store them in currentCrawlerResultData
-        
+        //parse file & extract headers and links
+        //translate headers
+        //store results in currentCrawlerResultData
+
 
         //2) CHECK TERMINATION CONDITIONS
         if (currentDepth > maxDepth || currentCrawlerResultData.getChildren().size() == 0 || currentCrawlerResultData.isBroken()) {
@@ -48,15 +54,41 @@ public class WebCrawler {
         }
     }
 
+    private ArrayList<String> crawlDocument() {
+        ArrayList<String> foundURLs = new ArrayList<>();
+        ArrayList<String> foundHeaders = new ArrayList<>();
+
+        Document doc = getDocument();
+
+        if (doc != null) {
+
+            //select links
+            for (Element link : doc.select("a[href]")) {
+                String url = link.absUrl("href");
+                //System.out.println(url);
+                foundURLs.add(url);
+            }
+
+            //select headers
+            for (Element header : doc.select("h1,h2,h3,h4,h5,h6")) {
+                //System.out.println(header.text());
+                foundHeaders.add(header.text());
+            }
+        }
+
+        return foundURLs;
+    }
+
     private Element traverseDoc() {
         return getDocument().traverse(new NodeVisitor() {
             @Override
             public void head(Node node, int depth) {
                 String tag = node.nodeName();
                 if (tag.matches("h[1-6]")) {
+                    System.out.println("HEADER: " + tag);
                     return;
                 } else if (tag.matches("a")) {
-
+                    System.out.println("LINK: " + tag);
                 } else {
                     node.remove();
                 }
