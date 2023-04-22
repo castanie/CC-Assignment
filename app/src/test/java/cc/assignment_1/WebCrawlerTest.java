@@ -17,9 +17,9 @@ public class WebCrawlerTest {
         }
 
         @Test
-        @DisplayName("Basic call to crawlDocument()")
+        @DisplayName("Basic call to getReport()")
         protected void testCrawl() {
-            System.out.println(MarkdownConverter.convertDocument(this.webCrawler.getSummary()));
+            System.out.println(MarkdownConverter.convertDocument(this.webCrawler.getReport()));
         }
     }
 }

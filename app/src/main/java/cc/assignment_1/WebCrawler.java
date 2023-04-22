@@ -32,39 +32,31 @@ public class WebCrawler {
 
     // --------------------------------
 
-    public Document getSummary() {
-        Document summary = new Document(this.url);
-        summary.body().appendChildren(crawlDocument());
-        return summary;
+    public Document getReport() {
+        Document report = new Document(this.url);
+        report.body().appendChildren(getReportElements());
+        return report;
     }
 
-    private Elements crawlDocument() {
-        Elements elements = getElements();
+    private Elements getReportElements() {
+        Elements reportElements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6");
         if (this.depth > 0) {
-            derefLinks(elements);
+            embedLinkedDocuments(reportElements);
         }
-        return elements;
+        return reportElements;
     }
 
-    private Elements getElements() {
-        Elements elements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6");
-        for (Element element : elements) {
-            // element.empty();
-        }
-        return elements;
-    }
-
-    private void derefLinks(Elements elements) {
+    private void embedLinkedDocuments(Elements elements) {
         for (Element element : elements) {
             if (element.tagName() == "a") {
-                derefLink(element);
+                embedLinkedDocument(element);
             }
         }
     }
 
-    private void derefLink(Element element) {
+    private void embedLinkedDocument(Element element) {
         String url = element.absUrl("href");
         WebCrawler crawler = new WebCrawler(url, this.depth - 1);
-        element.appendChildren(crawler.crawlDocument());
+        element.appendChildren(crawler.getReportElements());
     }
 }
