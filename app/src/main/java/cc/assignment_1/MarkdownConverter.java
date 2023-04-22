@@ -6,52 +6,51 @@ import org.jsoup.nodes.Node;
 import org.jsoup.select.NodeVisitor;
 
 public class MarkdownConverter {
-    // private final Document document;
+    private final Document document;
+    private final StringBuilder builder;
 
     // --------------------------------
 
-    // public MarkdownConverter(Document document) {
-    // this.document = document;
-    // }
-
-    // --------------------------------
-
-    public static String convertDocument(Document document) {
-        StringBuilder builder = new StringBuilder();
-        document.body().children().traverse(new NodeVisitor() {
-            @Override
-            public void head(Node node, int depth) {
-                convertNode(builder, node, depth);
-            }
-        });
-        return builder.toString();
+    public MarkdownConverter(Document document) {
+        this.document = document;
+        this.builder = new StringBuilder();
     }
 
-    private static void convertNode(StringBuilder builder, Node node, Integer depth) {
+    // --------------------------------
+
+    public String convertDocument() {
+        this.document.body().children().traverse(new NodeVisitor() {
+            @Override
+            public void head(Node node, int depth) {
+                convertNode(node, depth);
+            }
+        });
+        return this.builder.toString();
+    }
+
+    private void convertNode(Node node, Integer depth) {
         if (node instanceof Element) {
-            indentLine(builder, depth);
-            convertLine(builder, node);
+            indentLine(depth);
+            convertLine(node);
         }
     }
 
-    private static void indentLine(StringBuilder builder, Integer depth) {
-        builder.append(">".repeat(depth) + " ");
+    private void indentLine(Integer depth) {
+        this.builder.append(">".repeat(depth) + " ");
     }
 
-    private static void convertLine(StringBuilder builder, Node node) {
+    private void convertLine(Node node) {
         Element element = (Element) node;
-        builder.append(
+        this.builder.append(
                 switch (element.tagName()) {
-                    case "a" -> "- ";// [" + node.attr("abs:href") + "] ";
-                    case "h1" -> "# ";
-                    case "h2" -> "## ";
-                    case "h3" -> "### ";
-                    case "h4" -> "#### ";
-                    case "h5" -> "##### ";
-                    case "h6" -> "###### ";
-                    default -> "!!! " + element.tagName();
-                }
-                        + element.ownText() + "\n");
+                    case "a" -> "- " + element.ownText() + " [" + node.absUrl("href") + "]\n";
+                    case "h1" -> "# " + element.ownText() + "\n";
+                    case "h2" -> "## " + element.ownText() + "\n";
+                    case "h3" -> "### " + element.ownText() + "\n";
+                    case "h4" -> "#### " + element.ownText() + "\n";
+                    case "h5" -> "##### " + element.ownText() + "\n";
+                    case "h6" -> "###### " + element.ownText() + "\n";
+                    default -> "\n";
+                });
     }
-
 }

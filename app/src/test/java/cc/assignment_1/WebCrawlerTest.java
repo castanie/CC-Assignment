@@ -3,6 +3,7 @@ package cc.assignment_1;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -23,7 +24,8 @@ public class WebCrawlerTest {
         @Test
         @DisplayName("Basic call to getReport()")
         protected void testCrawl() {
-            MarkdownConverter converter = new MarkdownConverter(this.webCrawler.getReport());
+            Document report = this.webCrawler.getReport();
+            MarkdownConverter converter = new MarkdownConverter(report);
             System.out.println(converter.convertDocument());
         }
     }
