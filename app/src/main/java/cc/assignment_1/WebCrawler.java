@@ -3,44 +3,68 @@ package cc.assignment_1;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.select.NodeFilter;
-import org.jsoup.select.NodeVisitor;
+import org.jsoup.select.Elements;
 
 public class WebCrawler {
     private final String url;
+    private final Integer depth;
     private final Document document;
 
-    public WebCrawler(String url) {
+    // --------------------------------
+
+    public WebCrawler(String url, int depth) {
         this.url = url;
-        this.document = this.getDocument();
+        this.depth = depth;
+        this.document = this.loadDocument();
     }
 
-    // Crawl:
-    // Filter nodes (h* or a)
-    // Dereference links (`append(crawl()`)
-
-    public Element crawl() {
-        return this.document.traverse(new NodeVisitor() {
-            @Override
-            public void head(Node node, int depth) {
-                String tag = node.nodeName();
-                if (tag.matches("h[1-6]")) {
-                    return;
-                } else if (tag.matches("a")) {
-
-                } else {
-                    node.remove();
-                }
-            }
-        }); // select("h1, h2, h3, h4, h5, h6, a");
+    public WebCrawler(String url) {
+        this(url, 2);
     }
 
-    private Document getDocument() {
+    private Document loadDocument() {
         try {
             return Jsoup.connect(this.url).get();
         } catch (Exception e) {
-            return new Document(null);
+            return new Document(this.url);
         }
+    }
+
+    // --------------------------------
+
+    public Document getSummary() {
+        Document summary = new Document(this.url);
+        summary.body().appendChildren(crawlDocument());
+        return summary;
+    }
+
+    private Elements crawlDocument() {
+        Elements elements = getElements();
+        if (this.depth > 0) {
+            derefLinks(elements);
+        }
+        return elements;
+    }
+
+    private Elements getElements() {
+        Elements elements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6");
+        for (Element element : elements) {
+            // element.empty();
+        }
+        return elements;
+    }
+
+    private void derefLinks(Elements elements) {
+        for (Element element : elements) {
+            if (element.tagName() == "a") {
+                derefLink(element);
+            }
+        }
+    }
+
+    private void derefLink(Element element) {
+        String url = element.absUrl("href");
+        WebCrawler crawler = new WebCrawler(url, this.depth - 1);
+        element.appendChildren(crawler.crawlDocument());
     }
 }

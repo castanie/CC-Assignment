@@ -7,19 +7,19 @@ import org.junit.jupiter.api.Test;
 
 public class WebCrawlerTest {
     @Nested
-    protected class Wikipedia {
+    protected class Example {
 
         private WebCrawler webCrawler;
 
         @BeforeEach
         protected void beforeEach() {
-            this.webCrawler = new WebCrawler("https://www.wikipedia.org/");
+            this.webCrawler = new WebCrawler("https://example.com/", 2);
         }
 
         @Test
-        @DisplayName("Basic call to crawl()")
+        @DisplayName("Basic call to crawlDocument()")
         protected void testCrawl() {
-            this.webCrawler.crawl();
+            System.out.println(MarkdownConverter.convertDocument(this.webCrawler.getSummary()));
         }
     }
 }
