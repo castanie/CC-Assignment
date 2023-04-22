@@ -1,5 +1,8 @@
 package cc.assignment_1;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,13 +16,15 @@ public class WebCrawlerTest {
 
         @BeforeEach
         protected void beforeEach() {
-            this.webCrawler = new WebCrawler("https://example.com/", 2);
+            ExecutorService executor = Executors.newCachedThreadPool();
+            this.webCrawler = new WebCrawler(executor, "https://example.com/", 2);
         }
 
         @Test
         @DisplayName("Basic call to getReport()")
         protected void testCrawl() {
-            System.out.println(MarkdownConverter.convertDocument(this.webCrawler.getReport()));
+            MarkdownConverter converter = new MarkdownConverter(this.webCrawler.getReport());
+            System.out.println(converter.convertDocument());
         }
     }
 }

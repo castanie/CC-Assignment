@@ -1,5 +1,10 @@
 package cc.assignment_1;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,17 +14,19 @@ public class WebCrawler {
     private final String url;
     private final Integer depth;
     private final Document document;
+    private final ExecutorService executor;
 
     // --------------------------------
 
-    public WebCrawler(String url, int depth) {
+    public WebCrawler(ExecutorService executor, String url, int depth) {
         this.url = url;
         this.depth = depth;
         this.document = this.loadDocument();
+        this.executor = executor;
     }
 
-    public WebCrawler(String url) {
-        this(url, 2);
+    public WebCrawler(ExecutorService executor, String url) {
+        this(executor, url, 2);
     }
 
     private Document loadDocument() {
@@ -47,16 +54,25 @@ public class WebCrawler {
     }
 
     private void embedLinkedDocuments(Elements elements) {
+        List<Callable<Void>> tasks = new ArrayList<>();
         for (Element element : elements) {
             if (element.tagName() == "a") {
-                embedLinkedDocument(element);
+                tasks.add(() -> {
+                    embedLinkedDocument(element);
+                    return null;
+                });
             }
+        }
+        try {
+            this.executor.invokeAll(tasks);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     private void embedLinkedDocument(Element element) {
         String url = element.absUrl("href");
-        WebCrawler crawler = new WebCrawler(url, this.depth - 1);
+        WebCrawler crawler = new WebCrawler(this.executor, url, this.depth - 1);
         element.appendChildren(crawler.getReportElements());
     }
 }
