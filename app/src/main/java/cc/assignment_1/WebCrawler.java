@@ -21,7 +21,7 @@ public class WebCrawler {
     public WebCrawler(ExecutorService executor, String url, int depth) {
         this.url = url;
         this.depth = depth;
-        this.document = this.loadDocument();
+        this.document = this.loadHtmlDocument();
         this.executor = executor;
     }
 
@@ -29,7 +29,7 @@ public class WebCrawler {
         this(executor, url, 2);
     }
 
-    private Document loadDocument() {
+    private Document loadHtmlDocument() {
         try {
             return Jsoup.connect(this.url).get();
         } catch (Exception e) {
@@ -39,40 +39,70 @@ public class WebCrawler {
 
     // --------------------------------
 
-    public Document getReport() {
+    public Document getHtmlReport() {
         Document report = new Document(this.url);
-        report.body().appendChildren(getReportElements());
+        report.body().appendChildren(getHtmlReportElements());
         return report;
     }
 
-    private Elements getReportElements() {
+    private Elements getHtmlReportElements() {
         Elements reportElements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6");
+        condenseHtmlReportElements(reportElements);
         if (this.depth > 0) {
-            embedLinkedDocuments(reportElements);
+            embedLinkedHtmlDocuments(reportElements);
         }
         return reportElements;
     }
 
-    private void embedLinkedDocuments(Elements elements) {
-        List<Callable<Void>> tasks = new ArrayList<>();
+    private void condenseHtmlReportElements(Elements elements) {
         for (Element element : elements) {
-            if (element.tagName() == "a") {
-                tasks.add(() -> {
-                    embedLinkedDocument(element);
+            element.attr("data-text", element.ownText());
+            element.empty();
+        }
+    }
+
+    private void embedLinkedHtmlDocuments(Elements elements) {
+        generateDivContainers(elements);
+        try {
+            this.executor.invokeAll(generateAsyncTasks(elements));
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+    }
+
+    private void generateDivContainers(Elements elements) {
+        int index = 0;
+        while (index < elements.size()) {
+            if (elements.get(index).tagName() == "a") {
+                generateDivContainer(elements, index);
+                ++index;
+            }
+            ++index;
+        }
+    }
+
+    private void generateDivContainer(Elements elements, Integer index) {
+        Element container = new Element("div");
+        container.attr("data-link", elements.get(index).attr("href"));
+        elements.add(index + 1, container);
+    }
+
+    private List<Callable<Void>> generateAsyncTasks(Elements elements) {
+        List<Callable<Void>> loadingTasks = new ArrayList<>();
+        for (Element element : elements) {
+            if (element.tagName() == "div") {
+                loadingTasks.add(() -> {
+                    embedLinkedHtmlDocument(element);
                     return null;
                 });
             }
         }
-        try {
-            this.executor.invokeAll(tasks);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        return loadingTasks;
     }
 
-    private void embedLinkedDocument(Element element) {
-        String url = element.absUrl("href");
+    private void embedLinkedHtmlDocument(Element element) {
+        String url = element.absUrl("data-link");
         WebCrawler crawler = new WebCrawler(this.executor, url, this.depth - 1);
-        element.appendChildren(crawler.getReportElements());
+        element.appendChildren(crawler.getHtmlReportElements());
     }
 }
