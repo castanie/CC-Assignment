@@ -73,15 +73,15 @@ public class WebCrawler {
     private void generateDivContainers(Elements elements) {
         int index = 0;
         while (index < elements.size()) {
-            if (elements.get(index).tagName() == "a") {
-                generateDivContainer(elements, index);
+            if (elements.get(index).tagName().equals("a")) {
+                generateSingleDivContainer(elements, index);
                 ++index;
             }
             ++index;
         }
     }
 
-    private void generateDivContainer(Elements elements, Integer index) {
+    private void generateSingleDivContainer(Elements elements, Integer index) {
         Element container = new Element("div");
         container.attr("data-link", elements.get(index).attr("href"));
         elements.add(index + 1, container);
@@ -90,7 +90,7 @@ public class WebCrawler {
     private List<Callable<Void>> generateAsyncTasks(Elements elements) {
         List<Callable<Void>> loadingTasks = new ArrayList<>();
         for (Element element : elements) {
-            if (element.tagName() == "div") {
+            if (element.tagName().equals("div")) {
                 loadingTasks.add(() -> {
                     embedLinkedHtmlDocument(element);
                     return null;
