@@ -19,7 +19,7 @@ public class URLValidator {
 
     protected String addProtocolIfMissing() {
         if (!url.matches("^(https?)://.*$")) {
-            url = "http://" + url;
+            url = "https://" + url;
         }
         return url;
     }
@@ -36,7 +36,6 @@ public class URLValidator {
     }
 
     protected int connectToUrl() throws URISyntaxException, IOException {
-        new URL(url).toURI();
         URL urlObject = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) urlObject.openConnection();
         connection.setRequestMethod("HEAD");

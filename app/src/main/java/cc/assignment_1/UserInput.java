@@ -80,10 +80,9 @@ public class UserInput {
     }
 
     protected boolean targetLanguageIsValid(String targetLanguage) {
-        //TODO: only allow languages that actually exist
-        if (targetLanguage == null || targetLanguage.length() == 0) {
-            return false;
+        if (targetLanguage != null && targetLanguage.length() != 0 && Translator.getTranslator().languageExists(targetLanguage)) {
+            return true;
         }
-        return true;
+        return false;
     }
 }
