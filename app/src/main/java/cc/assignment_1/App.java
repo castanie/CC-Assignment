@@ -3,8 +3,16 @@
  */
 package cc.assignment_1;
 
+import java.util.concurrent.Executors;
+
 public class App {
     public static void main(String[] args) {
         UserInput userInput = UserInput.getUserInput();
+
+        WebCrawler webCrawler = new WebCrawler(Executors.newCachedThreadPool(), userInput.getUrl(), userInput.getDepth());
+        MarkdownConverter markdownConverter = new MarkdownConverter(webCrawler.getHtmlReport());
+        String result = markdownConverter.convertDocument();
+
+        System.out.println(result); //just for testing purposes
     }
 }

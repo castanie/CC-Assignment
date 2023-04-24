@@ -56,7 +56,7 @@ public class WebCrawler {
 
     private void condenseHtmlReportElements(Elements elements) {
         for (Element element : elements) {
-            element.attr("data-text", element.ownText());
+            element.attr("data-text", element.text());
             element.empty();
         }
     }
