@@ -46,7 +46,7 @@ public class WebCrawler {
     }
 
     private Elements getHtmlReportElements() {
-        Elements reportElements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6");
+        Elements reportElements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6").clone();
         condenseHtmlReportElements(reportElements);
         if (this.depth > 0) {
             embedLinkedHtmlDocuments(reportElements);
@@ -56,7 +56,7 @@ public class WebCrawler {
 
     private void condenseHtmlReportElements(Elements elements) {
         for (Element element : elements) {
-            element.attr("data-text", element.ownText());
+            element.attr("data-text", element.text());
             element.empty();
         }
     }

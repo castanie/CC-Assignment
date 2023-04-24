@@ -43,13 +43,13 @@ public class MarkdownConverter {
         Element element = (Element) node;
         this.builder.append(
                 switch (element.tagName()) {
-                    case "a" -> "- " + element.ownText() + " [" + node.absUrl("href") + "]\n";
-                    case "h1" -> "# " + element.ownText() + "\n";
-                    case "h2" -> "## " + element.ownText() + "\n";
-                    case "h3" -> "### " + element.ownText() + "\n";
-                    case "h4" -> "#### " + element.ownText() + "\n";
-                    case "h5" -> "##### " + element.ownText() + "\n";
-                    case "h6" -> "###### " + element.ownText() + "\n";
+                    case "a" -> "- " + element.attr("data-text") + " [" + node.absUrl("href") + "]\n";
+                    case "h1" -> "# " + element.attr("data-text") + "\n";
+                    case "h2" -> "## " + element.attr("data-text") + "\n";
+                    case "h3" -> "### " + element.attr("data-text") + "\n";
+                    case "h4" -> "#### " + element.attr("data-text") + "\n";
+                    case "h5" -> "##### " + element.attr("data-text") + "\n";
+                    case "h6" -> "###### " + element.attr("data-text") + "\n";
                     default -> "\n";
                 });
     }
