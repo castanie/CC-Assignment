@@ -28,4 +28,23 @@ public class WebCrawlerTest {
             System.out.println(report.body());
         }
     }
+
+    @Nested
+    protected class Waldhalla {
+
+        private WebCrawler webCrawler;
+
+        @BeforeEach
+        protected void beforeEach() {
+            ExecutorService executor = Executors.newCachedThreadPool();
+            this.webCrawler = new WebCrawler(executor, "https://waldhalla.com/", 1);
+        }
+
+        @Test
+        @DisplayName("Basic call to getReport()")
+        protected void testCrawl() {
+            Document report = this.webCrawler.getHtmlReport();
+            System.out.println(report.body());
+        }
+    }
 }

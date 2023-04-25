@@ -1,5 +1,8 @@
 package cc.assignment_1;
 
+import java.io.File;
+
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -48,6 +51,29 @@ public class MarkdownConverterTest {
                                 </div>
                             </div>
                             """);
+            this.mdConverter = new MarkdownConverter(document);
+        }
+
+        @Test
+        @DisplayName("Basic call to convertDocument()")
+        protected void testConvertDocument() {
+            System.out.println(mdConverter.convertDocument());
+        }
+    }
+
+    @Nested
+    protected class WaldhallaDepthOne {
+
+        private MarkdownConverter mdConverter;
+
+        @BeforeEach
+        protected void beforeEach() {
+            Document document = new Document("");
+            try {
+                document = Jsoup.parse(new File(this.getClass().getResource("/waldhalla.html").getFile()));
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+            }
             this.mdConverter = new MarkdownConverter(document);
         }
 
