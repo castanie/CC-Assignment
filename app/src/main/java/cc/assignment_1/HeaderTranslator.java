@@ -24,6 +24,7 @@ public class HeaderTranslator {
         extractHeadersFromDoc();
         headerListTranslated = Translator.getTranslator().translateListOFStrings(this.headerList, targetLanguage);
         setTranslatedHeadersInDoc();
+        System.out.println();
         return this.doc;
     }
 

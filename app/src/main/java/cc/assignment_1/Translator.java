@@ -22,7 +22,7 @@ public class Translator extends com.deepl.api.Translator {
 
     public List<String> translateListOFStrings(List<String> input, String targetLanguage) {
         try {
-            List<TextResult> result = translator.translateText(input, null, targetLanguage);
+            List<TextResult> result = translator.translateText(input, null, getLanguageCodeFromName(targetLanguage));
             return convertToStringList(result);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -46,6 +46,19 @@ public class Translator extends com.deepl.api.Translator {
         } catch (Exception ignored) {
         }
         return false;
+    }
+
+    public String getLanguageCodeFromName(String languageName) {
+        try {
+            for (Language language : translator.getTargetLanguages()) {
+                if (language.getName().equals(languageName)) {
+                    return language.getCode();
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Target Language not available!");
+        }
+        return "";
     }
 
     public ArrayList<String> listAvailableTargetLanguages() throws DeepLException, InterruptedException {
