@@ -1,26 +1,23 @@
 package cc.assignment_1;
 
 import java.util.Scanner;
+import java.util.function.Function;
 
 public class UserInput {
-    private static final UserInput userInput = new UserInput();
     private String url;
-    private int depth;
+    private Integer depth;
     private String targetLanguage;
+    private Scanner scanner;
 
     private UserInput() {
-        readUserInput();
-    }
-
-    public static UserInput getUserInput() {
-        return userInput;
+        this.scanner = new Scanner(System.in);
     }
 
     public String getUrl() {
         return url;
     }
 
-    public int getDepth() {
+    public Integer getDepth() {
         return depth;
     }
 
@@ -28,61 +25,76 @@ public class UserInput {
         return targetLanguage;
     }
 
-    public void setTargetLanguage(String targetLanguage) {
-        this.targetLanguage = targetLanguage;
+    public static UserInput promptUserInput() {
+        UserInput userInput = new UserInput();
+        userInput.promptUrl();
+        userInput.promptDepth();
+        userInput.promptLanguage();
+        return userInput;
     }
 
-    public void readUserInput() {
-        Scanner scanner = new Scanner(System.in);
-
-        readUrl(scanner);
-        readDepth(scanner);
-        readLanguage(scanner);
+    private void promptUrl() {
+        this.url = promptString("Enter URL:", new Function<String, Boolean>() {
+            @Override
+            public Boolean apply(String t) {
+                return urlIsValid(t);
+            }
+        });
     }
 
-    protected void readUrl(Scanner scanner) {
-        System.out.println("Enter URL: ");
-        url = scanner.nextLine();
-        while (!urlIsValid(url)) {
-            System.out.println("Invalid Input. Enter URL: ");
-            url = scanner.nextLine();
+    private void promptDepth() {
+        this.depth = promptInteger("Enter recursiondepth:", new Function<Integer, Boolean>() {
+            @Override
+            public Boolean apply(Integer t) {
+                return depthIsValid(t);
+            }
+        });
+    }
+
+    private void promptLanguage() {
+        this.url = promptString("Enter target language:", new Function<String, Boolean>() {
+            @Override
+            public Boolean apply(String t) {
+                return targetLanguageIsValid(t);
+            }
+        });
+    }
+
+    private String promptString(String promptText, Function<String, Boolean> inputValidator) {
+        System.out.println(promptText);
+        String value = this.scanner.nextLine();
+        if (!inputValidator.apply(value)) {
+            printInvalidInputMessage();
+            value = promptString(promptText, inputValidator);
         }
+        return value;
     }
 
-    protected void readDepth(Scanner scanner) {
-        while (!depthIsValid(depth)) {
-            System.out.println("Enter depth: ");
-            depth = scanner.nextInt();
-            scanner.nextLine();
+    private Integer promptInteger(String promptText, Function<Integer, Boolean> inputValidator) {
+        System.out.println(promptText);
+        Integer value = this.scanner.nextInt();
+        this.scanner.nextLine();
+        if (!inputValidator.apply(value)) {
+            printInvalidInputMessage();
+            value = promptInteger(promptText, inputValidator);
         }
+        return value;
     }
 
-    protected void readLanguage(Scanner scanner) {
-        while (!targetLanguageIsValid(targetLanguage)) {
-            System.out.println(("Enter target language: "));
-            targetLanguage = scanner.nextLine();
-        }
+    private void printInvalidInputMessage() {
+        System.out.print("Invalid input, try again - ");
     }
 
-    protected boolean urlIsValid(String url) {
-        if (url == null) {
-            return false;
-        }
-        URLValidator urlValidator = new URLValidator(url);
-        return urlValidator.urlIsValid();
+    private boolean urlIsValid(String url) {
+        return new URLValidator(url).urlIsValid();
     }
 
-    protected boolean depthIsValid(int depth) {
-        if (depth < 1 || depth > 100) {
-            return false;
-        }
-        return true;
+    private boolean depthIsValid(Integer depth) {
+        return depth > 0 && depth < 10;
     }
 
-    protected boolean targetLanguageIsValid(String targetLanguage) {
-        if (targetLanguage != null && targetLanguage.length() != 0 && Translator.getTranslator().languageExists(targetLanguage)) {
-            return true;
-        }
-        return false;
+    private boolean targetLanguageIsValid(String targetLanguage) {
+        return targetLanguage != null && !targetLanguage.isEmpty()
+                && Translator.getTranslator().supportsLanguage(targetLanguage);
     }
 }

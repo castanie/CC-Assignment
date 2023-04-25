@@ -32,7 +32,7 @@ public class Translator extends com.deepl.api.Translator {
         return translator.translateText(text, null, targetLanguage);
     }
 
-    public boolean languageExists(String language) {
+    public boolean supportsLanguage(String language) {
         try {
             if (listAvailableTargetLanguages().contains(language)) {
                 return true;
