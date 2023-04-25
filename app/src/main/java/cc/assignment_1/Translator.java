@@ -61,7 +61,7 @@ public class Translator extends com.deepl.api.Translator {
         return "";
     }
 
-    public ArrayList<String> listAvailableTargetLanguages() throws DeepLException, InterruptedException {
+    private ArrayList<String> listAvailableTargetLanguages() throws DeepLException, InterruptedException {
         ArrayList<String> languages = new ArrayList<>();
         for (Language targetLanguage : translator.getTargetLanguages()) {
             languages.add(targetLanguage.getName());

@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HeaderTranslator {
-    Document doc;
-    List<String> listOfHeaders;
-    List<String> listOfTranslatedHeaders;
-    int indexOfHeaderInList;
+    private final Document doc;
+    private List<String> listOfHeaders;
+    private List<String> listOfTranslatedHeaders;
+    private int indexOfHeaderInList;
 
     public HeaderTranslator(Document doc) {
         this.doc = doc;
@@ -27,7 +27,7 @@ public class HeaderTranslator {
         return this.doc;
     }
 
-    protected void extractHeadersFromDoc() {
+    private void extractHeadersFromDoc() {
         this.doc.body().children().traverse(new NodeVisitor() {
             @Override
             public void head(Node node, int depth) {
@@ -45,7 +45,7 @@ public class HeaderTranslator {
         }
     }
 
-    protected void setTranslatedHeadersInDoc() {
+    private void setTranslatedHeadersInDoc() {
         this.indexOfHeaderInList = 0;
         doc.body().children().traverse(new NodeVisitor() {
             @Override
@@ -57,12 +57,11 @@ public class HeaderTranslator {
         });
     }
 
-    private Element setHeadersInNode(Element element) {
+    private void setHeadersInNode(Element element) {
         if (elementIsHeader(element) && element.attr("data-text").length() > 0) {
             element.attr("data-text", listOfTranslatedHeaders.get(indexOfHeaderInList));
             this.indexOfHeaderInList++;
         }
-        return element;
     }
 
     private boolean elementIsHeader(Element element) {
