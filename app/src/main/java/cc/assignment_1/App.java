@@ -3,48 +3,16 @@
  */
 package cc.assignment_1;
 
+import java.util.concurrent.Executors;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
-
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-
         UserInput userInput = UserInput.getUserInput();
 
+        WebCrawler webCrawler = new WebCrawler(Executors.newCachedThreadPool(), userInput.getUrl(), userInput.getDepth());
+        MarkdownConverter markdownConverter = new MarkdownConverter(webCrawler.getHtmlReport());
+        String result = markdownConverter.convertDocument();
 
-
-        // Check commamnd line arguments (valid url, depth is number, ...):
-
-
-        // Main recursive function:
-
-            // Get document contents (GET request):
-
-            // Parse file to get <a> and <h*> tags:
-
-            // Write summary of <h*> tags to StringBuilder:
-
-                // Concatenate all <h*> tags:
-
-                // Translate <h*> tags using DeepL:
-
-                    // Send API call to "api-free.deepl.com":
-
-                    // Read response:
-
-            // For each <a> tag:
-
-                // Send HEAD request to check for broken links:
-
-                    // Write broken link (<s>...</s>) and return:
-
-                // If not broken:
-
-                    // Write link to StringBuilder:
-
-                    // Write output of recursive call to StringBuilder (include current indentation level):
-
+        System.out.println(result); //just for testing purposes
     }
 }
