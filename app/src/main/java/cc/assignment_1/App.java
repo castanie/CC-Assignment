@@ -10,7 +10,8 @@ public class App {
         UserInput userInput = UserInput.getUserInput();
 
         WebCrawler webCrawler = new WebCrawler(Executors.newCachedThreadPool(), userInput.getUrl(), userInput.getDepth());
-        MarkdownConverter markdownConverter = new MarkdownConverter(webCrawler.getHtmlReport());
+        HeaderTranslator headerTranslator = new HeaderTranslator(webCrawler.getHtmlReport());
+        MarkdownConverter markdownConverter = new MarkdownConverter(headerTranslator.translateHeadersInDoc(userInput.getTargetLanguage()));
         String result = markdownConverter.convertDocument();
 
         System.out.println(result); //just for testing purposes

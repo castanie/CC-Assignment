@@ -26,10 +26,8 @@ public class URLValidator {
 
     protected boolean checkUrlNotBroken() {
         try {
-            if (connectToUrl() == HttpURLConnection.HTTP_OK) {
-                return true;
-            }
-            return false;
+            int responseCode = connectToUrl();
+            return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP;
         } catch (URISyntaxException | IOException e) {
             return false;
         }
