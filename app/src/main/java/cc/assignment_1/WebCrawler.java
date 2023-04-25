@@ -39,6 +39,12 @@ public class WebCrawler {
 
     // --------------------------------
 
+    public Document getHtmlReportWithPreface(String preface) {
+        Document report = getHtmlReport();
+        report.body().prepend(preface + "\n".repeat(3));
+        return report;
+    }
+
     public Document getHtmlReport() {
         Document report = new Document(this.url);
         report.body().appendChildren(getHtmlReportElements());
