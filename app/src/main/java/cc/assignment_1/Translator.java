@@ -6,6 +6,7 @@ import com.deepl.api.TextResult;
 import com.deepl.api.TranslatorOptions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Translator extends com.deepl.api.Translator {
     private static final Translator translator = new Translator();
@@ -19,17 +20,22 @@ public class Translator extends com.deepl.api.Translator {
         return translator;
     }
 
-    public String translateString(String input, String targetLanguage) {
+    public List<String> translateListOFStrings(List<String> input, String targetLanguage) {
         try {
-            TextResult result = callTranslationMethod(input, targetLanguage);
-            return result.getText();
+            List<TextResult> result = translator.translateText(input, null, targetLanguage);
+            return convertToStringList(result);
         } catch (Exception e) {
-            return "Translation failed";
+            System.out.println(e.getMessage());
         }
+        return input;
     }
 
-    private TextResult callTranslationMethod(String text, String targetLanguage) throws DeepLException, InterruptedException {
-        return translator.translateText(text, null, targetLanguage);
+    private List<String> convertToStringList(List<TextResult> list) {
+        List<String> stringList = new ArrayList<>();
+        for (TextResult result : list) {
+            stringList.add(result.getText());
+        }
+        return stringList;
     }
 
     public boolean languageExists(String language) {
