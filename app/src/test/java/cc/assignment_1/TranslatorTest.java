@@ -34,7 +34,7 @@ class TranslatorTest {
 
     @Test
     void testTranslateListOfStrings() {
-        assertEquals(getSpanishStrings(), translator.translateListOFStrings(getGermanStrings(), "Spanish"));
+        assertEquals(getSpanishStrings(), translator.translateListOfStrings(getGermanStrings(), "Spanish"));
     }
 
     @Test

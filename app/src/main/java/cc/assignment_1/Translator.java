@@ -20,7 +20,7 @@ public class Translator extends com.deepl.api.Translator {
         return translator;
     }
 
-    public List<String> translateListOFStrings(List<String> input, String targetLanguage) {
+    public List<String> translateListOfStrings(List<String> input, String targetLanguage) {
         try {
             List<TextResult> result = translator.translateText(input, null, getLanguageCodeFromName(targetLanguage));
             return convertToStringList(result);
