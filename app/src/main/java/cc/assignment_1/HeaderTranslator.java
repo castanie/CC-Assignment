@@ -65,6 +65,13 @@ public class HeaderTranslator {
     }
 
     private boolean elementIsHeader(Element element) {
-        return element.tagName().equals("h1") || element.tagName().equals("h2") || element.tagName().equals("h3") || element.tagName().equals("h4") || element.tagName().equals("h5") || element.tagName().equals("h6");
+        String[] headerTags = {"h1", "h2", "h3", "h4", "h5", "h6"};
+
+        for (String tag : headerTags) {
+            if (element.tagName().equals(tag)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
