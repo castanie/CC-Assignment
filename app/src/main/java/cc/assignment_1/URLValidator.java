@@ -14,7 +14,7 @@ public class URLValidator {
 
     public boolean urlIsValid() {
         url = addProtocolIfMissing();
-        return checkUrlNotBroken();
+        return urlNotBroken();
     }
 
     protected String addProtocolIfMissing() {
@@ -24,7 +24,7 @@ public class URLValidator {
         return url;
     }
 
-    protected boolean checkUrlNotBroken() {
+    protected boolean urlNotBroken() {
         try {
             int responseCode = connectToUrl();
             return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP;
