@@ -3,9 +3,7 @@
  */
 package cc.assignment_1;
 
-import java.io.File;
 import java.nio.file.Files;
-import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.concurrent.Executors;
 
@@ -21,7 +19,8 @@ public class App {
                 userInput.getDepth());
         Document htmlReport = webCrawler.getHtmlReport();
 
-        MarkdownConverter mdConverter = new MarkdownConverter(htmlReport);
+        HeaderTranslator headerTranslator = new HeaderTranslator(htmlReport);
+        MarkdownConverter mdConverter = new MarkdownConverter(headerTranslator.translateHeadersInDoc(UserInput.getUserInput().getTargetLanguage()));
         String mdReport = mdConverter.convertDocument();
 
         try {
