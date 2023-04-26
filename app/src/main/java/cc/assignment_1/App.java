@@ -3,17 +3,30 @@
  */
 package cc.assignment_1;
 
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
+import java.nio.file.Path;
 import java.util.concurrent.Executors;
+
+import org.jsoup.nodes.Document;
 
 public class App {
     public static void main(String[] args) {
         UserInput userInput = UserInput.getUserInput();
 
-        WebCrawler webCrawler = new WebCrawler(Executors.newCachedThreadPool(), userInput.getUrl(), userInput.getDepth());
-        HeaderTranslator headerTranslator = new HeaderTranslator(webCrawler.getHtmlReport());
-        MarkdownConverter markdownConverter = new MarkdownConverter(headerTranslator.translateHeadersInDoc(userInput.getTargetLanguage()));
-        String result = markdownConverter.convertDocument();
+        WebCrawler webCrawler = new WebCrawler(
+                Executors.newCachedThreadPool(),
+                userInput.getUrl(),
+                userInput.getDepth());
+        Document htmlReport = webCrawler.getHtmlReport();
 
-        System.out.println(result); //just for testing purposes
+        MarkdownConverter mdConverter = new MarkdownConverter(htmlReport);
+        String mdReport = mdConverter.convertDocument();
+
+        try {
+            Files.writeString(Path.of("./report.md"), mdReport, (OpenOption) null);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
 }
