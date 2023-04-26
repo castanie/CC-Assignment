@@ -3,6 +3,7 @@
  */
 package cc.assignment_1;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.OpenOption;
 import java.nio.file.Path;
@@ -24,7 +25,7 @@ public class App {
         String mdReport = mdConverter.convertDocument();
 
         try {
-            Files.writeString(Path.of("./report.md"), mdReport, (OpenOption) null);
+            Files.writeString(Path.of("report.md"), mdReport);
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
