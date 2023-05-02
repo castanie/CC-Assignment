@@ -49,7 +49,7 @@ public class WebCrawler {
         Elements reportElements = this.document.select("a[href], h1, h2, h3, h3, h4, h5, h6").clone();
         condenseHtmlReportElements(reportElements);
         if (this.depth > 0) {
-            embedLinkedHtmlDocuments(reportElements);
+            embedAllLinkedHtmlDocuments(reportElements);
         }
         return reportElements;
     }
@@ -61,48 +61,56 @@ public class WebCrawler {
         }
     }
 
-    private void embedLinkedHtmlDocuments(Elements elements) {
-        generateDivContainers(elements);
+    private void embedAllLinkedHtmlDocuments(Elements elements) {
+        generateDocumentContainers(elements);
         try {
-            this.executor.invokeAll(generateAsyncTasks(elements));
+            this.executor.invokeAll(generateAsyncLoadingTasks(elements));
         } catch (Exception e) {
             System.err.println(e.getMessage());
         }
     }
 
-    private void generateDivContainers(Elements elements) {
+    private void generateDocumentContainers(Elements elements) {
         int index = 0;
         while (index < elements.size()) {
             if (elements.get(index).tagName().equals("a")) {
-                generateSingleDivContainer(elements, index);
+                Element container = new Element("div");
+                elements.add(index + 1, container);
                 ++index;
             }
             ++index;
         }
     }
 
-    private void generateSingleDivContainer(Elements elements, Integer index) {
-        Element container = new Element("div");
-        container.attr("data-link", elements.get(index).attr("href"));
-        elements.add(index + 1, container);
-    }
-
-    private List<Callable<Void>> generateAsyncTasks(Elements elements) {
+    private List<Callable<Void>> generateAsyncLoadingTasks(Elements elements) {
         List<Callable<Void>> loadingTasks = new ArrayList<>();
-        for (Element element : elements) {
-            if (element.tagName().equals("div")) {
+        int index = 1;
+        while (index < elements.size()) {
+            if (elements.get(index).tagName().equals("div")) {
+                Element a = elements.get(index - 1);
+                Element div = elements.get(index);
                 loadingTasks.add(() -> {
-                    embedLinkedHtmlDocument(element);
+                    embedLinkedHtmlDocument(a, div);
                     return null;
                 });
+                ++index;
             }
+            ++index;
         }
         return loadingTasks;
     }
 
-    private void embedLinkedHtmlDocument(Element element) {
-        String url = element.absUrl("data-link");
+    private void embedLinkedHtmlDocument(Element anchor, Element container) {
+        String url = anchor.absUrl("href");
+        URLValidator urlValidator = new URLValidator(url);
+        if (!urlValidator.urlNotBroken()) {
+            flagLinkAsBroken(anchor);
+        }
         WebCrawler crawler = new WebCrawler(this.executor, url, this.depth - 1);
-        element.appendChildren(crawler.getHtmlReportElements());
+        container.appendChildren(crawler.getHtmlReportElements());
+    }
+
+    private void flagLinkAsBroken(Element anchor) {
+        anchor.attr("data-text", anchor.attr("data-text") + " [BROKEN LINK OR REDIRECT]");
     }
 }

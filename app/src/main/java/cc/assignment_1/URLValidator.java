@@ -14,7 +14,7 @@ public class URLValidator {
 
     public boolean urlIsValid() {
         url = addProtocolIfMissing();
-        return checkUrlNotBroken();
+        return urlNotBroken();
     }
 
     protected String addProtocolIfMissing() {
@@ -24,12 +24,10 @@ public class URLValidator {
         return url;
     }
 
-    protected boolean checkUrlNotBroken() {
+    protected boolean urlNotBroken() {
         try {
-            if (connectToUrl() == HttpURLConnection.HTTP_OK) {
-                return true;
-            }
-            return false;
+            int responseCode = connectToUrl();
+            return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP;
         } catch (URISyntaxException | IOException e) {
             return false;
         }
