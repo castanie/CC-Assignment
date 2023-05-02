@@ -1,4 +1,4 @@
-package cc.assignment_1;
+package cc.assignment;
 
 import com.deepl.api.DeepLException;
 import com.deepl.api.Language;

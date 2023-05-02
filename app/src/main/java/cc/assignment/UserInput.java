@@ -1,4 +1,4 @@
-package cc.assignment_1;
+package cc.assignment;
 
 import java.util.Scanner;
 
