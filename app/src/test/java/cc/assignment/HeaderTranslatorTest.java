@@ -1,4 +1,4 @@
-package cc.assignment_1;
+package cc.assignment;
 
 import org.jsoup.nodes.Document;
 import org.junit.jupiter.api.BeforeEach;

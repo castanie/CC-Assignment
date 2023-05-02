@@ -1,4 +1,4 @@
-package cc.assignment_1;
+package cc.assignment;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

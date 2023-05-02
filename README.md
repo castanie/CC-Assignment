@@ -1,4 +1,4 @@
-# CC-Assignment-1
+# CC-Assignment
 
 ## Requisites
 
