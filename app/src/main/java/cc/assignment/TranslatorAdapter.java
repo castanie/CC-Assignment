@@ -14,11 +14,14 @@ public class TranslatorAdapter implements Translator {
 
     @Override
     public List<String> translateListOfStrings(List<String> input, String targetLanguage) {
+        List<TextResult> result;
         try {
-            List<TextResult> result = deepLTranslator.translateText(input, null, getLanguageCodeFromName(targetLanguage));
+            result = deepLTranslator.translateText(input, null, getLanguageCodeFromName(targetLanguage));
             return convertToStringList(result);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (DeepLException e) {
+            //TODO: log message
+        } catch (InterruptedException e) {
+            //TODO: log message
         }
         return input;
     }
@@ -34,7 +37,7 @@ public class TranslatorAdapter implements Translator {
     @Override
     public boolean languageExists(String language) {
         try {
-            if (listAvailableTargetLanguages().contains(language)) {
+            if (listAvailableTargetLanguageNames().contains(language)) {
                 return true;
             }
         } catch (Exception ignored) {
@@ -44,23 +47,30 @@ public class TranslatorAdapter implements Translator {
 
     @Override
     public String getLanguageCodeFromName(String languageName) {
-        try {
-            for (Language language : deepLTranslator.getTargetLanguages()) {
-                if (language.getName().equals(languageName)) {
-                    return language.getCode();
-                }
+        for (Language language : getTargetLanguagesFromDeepL()) {
+            if (language.getName().equals(languageName)) {
+                return language.getCode();
             }
-        } catch (Exception e) {
-            System.out.println("Target Language not available!");
         }
         return "";
     }
 
-    private ArrayList<String> listAvailableTargetLanguages() throws DeepLException, InterruptedException {
+    private ArrayList<String> listAvailableTargetLanguageNames() {
         ArrayList<String> languages = new ArrayList<>();
-        for (Language targetLanguage : deepLTranslator.getTargetLanguages()) {
+        for (Language targetLanguage : getTargetLanguagesFromDeepL()) {
             languages.add(targetLanguage.getName());
         }
         return languages;
+    }
+
+    private List<Language> getTargetLanguagesFromDeepL() {
+        try {
+            return deepLTranslator.getTargetLanguages();
+        } catch (DeepLException e) {
+            //TODO: log message
+        } catch (InterruptedException e) {
+            //TODO: log message
+        }
+        return new ArrayList<>();
     }
 }
