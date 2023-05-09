@@ -13,7 +13,7 @@ class TranslatorTest {
 
     @BeforeEach
     void setUp() {
-        translator = Translator.getTranslator();
+        translator = new TranslatorAdapter();
     }
 
     List<String> getGermanStrings() {
