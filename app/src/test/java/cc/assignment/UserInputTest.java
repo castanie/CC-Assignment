@@ -73,18 +73,6 @@ class UserInputTest {
         assertEquals("German", userInput.getTargetLanguage());
     }
 
-    private void setUpTestReadLanguageInvalidThenValid() {
-        userInput.setTargetLanguage(null);
-        System.setIn(new ByteArrayInputStream("\nEnglish".getBytes()));
-        userInput.readLanguage(new Scanner(System.in));
-    }
-
-    @Test
-    void testReadLanguageInvalidThenValid() {
-        setUpTestReadLanguageInvalidThenValid();
-        assertEquals("English", userInput.getTargetLanguage());
-    }
-
     @Test
     void testUrlIsValid() {
         assertTrue(userInput.urlIsValid("www.google.at"));

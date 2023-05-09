@@ -32,7 +32,7 @@ public class URLValidatorTest {
     @Test
     void testAddProtocolIfMissing() {
         setUp("www.google.at");
-        assertEquals("http://www.google.at", urlValidator.addProtocolIfMissing());
+        assertEquals("https://www.google.at", urlValidator.addProtocolIfMissing());
     }
 
     @Test

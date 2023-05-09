@@ -80,7 +80,8 @@ public class UserInput {
     }
 
     protected boolean targetLanguageIsValid(String targetLanguage) {
-        if (targetLanguage != null && targetLanguage.length() != 0 && Translator.getTranslator().languageExists(targetLanguage)) {
+        Translator translator = new TranslatorAdapter();
+        if (targetLanguage != null && targetLanguage.length() != 0 && translator.languageExists(targetLanguage)) {
             return true;
         }
         return false;

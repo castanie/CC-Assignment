@@ -22,7 +22,8 @@ public class HeaderTranslator {
 
     public Document translateHeadersInDoc(String targetLanguage) {
         extractHeadersFromDoc();
-        listOfTranslatedHeaders = Translator.getTranslator().translateListOfStrings(this.listOfHeaders, targetLanguage);
+        Translator translator = new TranslatorAdapter();
+        listOfTranslatedHeaders = translator.translateListOfStrings(this.listOfHeaders, targetLanguage);
         setTranslatedHeadersInDoc();
         return this.doc;
     }
