@@ -17,15 +17,15 @@ public class ErrorLogger {
         return errorLogger;
     }
 
-    public void addNewErrorMessage(String errorMessage, String className, String methodName) {
-        errorMessageArray.add(new Error(errorMessage, className, methodName));
+    public void addNewErrorMessage(String errorMessage, String className, String exceptionClassName) {
+        errorMessageArray.add(new Error(errorMessage, className, exceptionClassName));
     }
 
     public void writeErrorLogToFile() {
         FileWriter.writeToFile(formatErrorsToString(), "error-log.md");
     }
 
-    private String formatErrorsToString() {
+    protected String formatErrorsToString() {
         if (errorMessageArray.size() == 0) {
             return builder.append("Execution successful: No Errors occurred").toString();
         }
