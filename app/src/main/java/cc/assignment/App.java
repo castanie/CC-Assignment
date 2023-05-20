@@ -25,7 +25,6 @@ public class App {
                         UserInput.getUserInput().getTargetLanguage()));
 
         FileWriter.writeToFile(mdConverter.convertDocument(), "report.md");
-
-        ErrorLogger.getErrorLogger().writeErrorLogToFile();
+        FileWriter.writeToFile(ErrorLogger.getErrorLogger().getErrorLog(), "error-log.md");
     }
 }

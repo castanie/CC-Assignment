@@ -25,6 +25,6 @@ public class ErrorLoggerTest {
 
     @Test
     void formatErrorsToStringTest() {
-        assertEquals(getErrorLogForFormatErrorsToStringTest(), errorLogger.formatErrorsToString());
+        assertEquals(getErrorLogForFormatErrorsToStringTest(), errorLogger.getErrorLog());
     }
 }
