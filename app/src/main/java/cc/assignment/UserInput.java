@@ -28,10 +28,6 @@ public class UserInput {
         return targetLanguage;
     }
 
-    public void setTargetLanguage(String targetLanguage) {
-        this.targetLanguage = targetLanguage;
-    }
-
     public void readUserInput() {
         Scanner scanner = new Scanner(System.in);
 
@@ -81,7 +77,7 @@ public class UserInput {
 
     protected boolean targetLanguageIsValid(String targetLanguage) {
         Translator translator = new TranslatorAdapter();
-        if (targetLanguage != null && targetLanguage.length() != 0 && translator.languageExists(targetLanguage)) {
+        if (targetLanguage != null && targetLanguage.length() != 0 && translator.supportsLanguage(targetLanguage)) {
             return true;
         }
         return false;

@@ -39,16 +39,16 @@ class TranslatorTest {
 
     @Test
     void testLanguageExistsTrue() {
-        assertTrue(translator.languageExists("German"));
-        assertTrue(translator.languageExists("Norwegian"));
-        assertTrue(translator.languageExists("French"));
+        assertTrue(translator.supportsLanguage("German"));
+        assertTrue(translator.supportsLanguage("Norwegian"));
+        assertTrue(translator.supportsLanguage("French"));
     }
 
     @Test
     void testLanguageExistsFalse() {
-        assertFalse(translator.languageExists("asdf"));
-        assertFalse(translator.languageExists(""));
-        assertFalse(translator.languageExists("Gernam"));
+        assertFalse(translator.supportsLanguage("asdf"));
+        assertFalse(translator.supportsLanguage(""));
+        assertFalse(translator.supportsLanguage("Gernam"));
     }
 
     @Test

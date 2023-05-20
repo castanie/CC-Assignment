@@ -35,7 +35,7 @@ public class TranslatorAdapter implements Translator {
     }
 
     @Override
-    public boolean languageExists(String language) {
+    public boolean supportsLanguage(String language) {
         try {
             if (listAvailableTargetLanguageNames().contains(language)) {
                 return true;
