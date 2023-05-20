@@ -33,6 +33,7 @@ public class WebCrawler {
         try {
             return Jsoup.connect(this.url).get();
         } catch (Exception e) {
+            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage(), this.getClass().getName(), e.getClass().getName());
             return new Document(this.url);
         }
     }
@@ -66,7 +67,7 @@ public class WebCrawler {
         try {
             this.executor.invokeAll(generateAsyncLoadingTasks(elements));
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage(), this.getClass().getName(), e.getClass().getName());
         }
     }
 

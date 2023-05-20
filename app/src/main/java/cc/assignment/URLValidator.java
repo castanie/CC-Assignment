@@ -29,6 +29,7 @@ public class URLValidator {
             int responseCode = connectToUrl();
             return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP;
         } catch (URISyntaxException | IOException e) {
+            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage() + " - Broken URL", this.getClass().getName(), e.getClass().getName());
             return false;
         }
     }

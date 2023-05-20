@@ -18,10 +18,8 @@ public class TranslatorAdapter implements Translator {
         try {
             result = deepLTranslator.translateText(input, null, getLanguageCodeFromName(targetLanguage));
             return convertToStringList(result);
-        } catch (DeepLException e) {
-            //TODO: log message
-        } catch (InterruptedException e) {
-            //TODO: log message
+        } catch (DeepLException | InterruptedException e) {
+            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage(), this.getClass().getName(), e.getClass().getName());
         }
         return input;
     }
@@ -36,13 +34,7 @@ public class TranslatorAdapter implements Translator {
 
     @Override
     public boolean supportsLanguage(String language) {
-        try {
-            if (listAvailableTargetLanguageNames().contains(language)) {
-                return true;
-            }
-        } catch (Exception ignored) {
-        }
-        return false;
+        return listAvailableTargetLanguageNames().contains(language);
     }
 
     @Override
@@ -66,10 +58,8 @@ public class TranslatorAdapter implements Translator {
     private List<Language> getTargetLanguagesFromDeepL() {
         try {
             return deepLTranslator.getTargetLanguages();
-        } catch (DeepLException e) {
-            //TODO: log message
-        } catch (InterruptedException e) {
-            //TODO: log message
+        } catch (DeepLException | InterruptedException e) {
+            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage(), this.getClass().getName(), e.getClass().getName());
         }
         return new ArrayList<>();
     }

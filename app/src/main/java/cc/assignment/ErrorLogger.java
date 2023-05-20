@@ -26,9 +26,13 @@ public class ErrorLogger {
     }
 
     private String formatErrorsToString() {
+        if (errorMessageArray.size() == 0) {
+            return builder.append("Execution successful: No Errors occurred").toString();
+        }
+
         for (Error error : errorMessageArray
         ) {
-            String formattedError = "Error in class " + error.className() + " in Method " + error.methodName() + ": " + error.errorMessage() + "\n";
+            String formattedError = "Error (" + error.exceptionClassName() + ") in class " + error.className() + ": " + error.errorMessage() + "\n";
             this.builder.append(formattedError);
         }
         return builder.toString();
