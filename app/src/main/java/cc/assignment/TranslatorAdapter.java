@@ -19,7 +19,8 @@ public class TranslatorAdapter implements Translator {
             result = deepLTranslator.translateText(input, null, getLanguageCodeFromName(targetLanguage));
             return convertToStringList(result);
         } catch (DeepLException | InterruptedException e) {
-            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage(), this.getClass().getName(), e.getClass().getName());
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(TranslatorAdapter.class);
+            errorLogger.logError("Error while translating with DeepL: " + e.getMessage());
         }
         return input;
     }
@@ -59,7 +60,8 @@ public class TranslatorAdapter implements Translator {
         try {
             return deepLTranslator.getTargetLanguages();
         } catch (DeepLException | InterruptedException e) {
-            ErrorLogger.getErrorLogger().addNewErrorMessage(e.getMessage(), this.getClass().getName(), e.getClass().getName());
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(TranslatorAdapter.class);
+            errorLogger.logError("Error loading available target Languages from DeepL: " + e.getMessage());
         }
         return new ArrayList<>();
     }

@@ -13,7 +13,8 @@ public final class FileWriter {
         try {
             Files.writeString(Path.of(path), fileContent);
         } catch (IOException e) {
-            System.err.println("Error when writing to file " + path + ": " + e.getMessage());
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(FileWriter.class);
+            errorLogger.logError("Error when writing to file " + path + ": " + e.getMessage());
         }
     }
 }

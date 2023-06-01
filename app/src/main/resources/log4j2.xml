@@ -1,7 +1,7 @@
 <Configuration status="warn">
     <Appenders>
         <File name="error-log"
-              fileName="logs/error-log-${date:yyyy-MM-ddHHmmssSSS}.md">
+              fileName="logs/error-log-${date:yyyy-MM-dd-HHmmssSSS}.md">
             <PatternLayout>
                 <Pattern>%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n</Pattern>
             </PatternLayout>
