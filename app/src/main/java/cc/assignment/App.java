@@ -3,27 +3,52 @@
  */
 package cc.assignment;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import org.jsoup.nodes.Document;
 
 public class App {
     public static void main(String[] args) {
+        Document htmlReport = generateHtmlReport();
+        String mdReport = new MarkdownConverter(htmlReport).convertDocument();
+
+        FileWriter.writeToFile(mdReport, "report.md");
+    }
+
+    private static Document generateHtmlReport() {
         UserInput userInput = UserInput.getUserInput();
+        Document htmlReport = new Document("");
 
-        WebCrawler webCrawler = new WebCrawler(
-                Executors.newCachedThreadPool(),
-                userInput.getUrl(),
-                userInput.getDepth());
+        ExecutorService executor = Executors.newCachedThreadPool();
+        List<Callable<Void>> crawlingTasks = new ArrayList<>();
+        for (String url : userInput.getUrls()) {
+            crawlingTasks.add(() -> {
+                WebCrawler webCrawler = new WebCrawler(
+                        executor,
+                        url,
+                        userInput.getDepth());
 
-        Document htmlReport = webCrawler.getHtmlReport();
+                htmlReport.body().appendChild(webCrawler.getHtmlReport().body());
+                return null;
+            });
+        }
 
+        try {
+            executor.invokeAll(crawlingTasks);
+        } catch (Exception e) {
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(WebCrawler.class);
+            errorLogger.logError("Error invoking async tasks for embedding linked HTML documents: " + e.getMessage());
+        }
+
+        return translateHtmlReport(userInput, htmlReport);
+    }
+
+    private static Document translateHtmlReport(UserInput userInput, Document htmlReport) {
         HeaderTranslator headerTranslator = new HeaderTranslator(htmlReport);
-
-        MarkdownConverter mdConverter = new MarkdownConverter(
-                headerTranslator.translateHeadersInDoc(
-                        UserInput.getUserInput().getTargetLanguage()));
-
-        FileWriter.writeToFile(mdConverter.convertDocument(), "report.md");
+        return htmlReport = headerTranslator.translateHeadersInDoc(userInput.getTargetLanguage());
     }
 }
