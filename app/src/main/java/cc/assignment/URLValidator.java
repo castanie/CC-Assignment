@@ -29,6 +29,8 @@ public class URLValidator {
             int responseCode = connectToUrl();
             return responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP;
         } catch (URISyntaxException | IOException e) {
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(URLValidator.class);
+            errorLogger.logError("Error connecting to URL: " + e.getMessage());
             return false;
         }
     }

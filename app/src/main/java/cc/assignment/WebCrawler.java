@@ -33,6 +33,8 @@ public class WebCrawler {
         try {
             return Jsoup.connect(this.url).get();
         } catch (Exception e) {
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(WebCrawler.class);
+            errorLogger.logError("Error loading HTML Document: " + e.getMessage());
             return new Document(this.url);
         }
     }
@@ -66,7 +68,8 @@ public class WebCrawler {
         try {
             this.executor.invokeAll(generateAsyncLoadingTasks(elements));
         } catch (Exception e) {
-            System.err.println(e.getMessage());
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(WebCrawler.class);
+            errorLogger.logError("Error invoking async tasks for embedding linked HTML documents: " + e.getMessage());
         }
     }
 

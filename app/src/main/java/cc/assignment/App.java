@@ -3,8 +3,6 @@
  */
 package cc.assignment;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.concurrent.Executors;
 
 import org.jsoup.nodes.Document;
@@ -17,16 +15,15 @@ public class App {
                 Executors.newCachedThreadPool(),
                 userInput.getUrl(),
                 userInput.getDepth());
+
         Document htmlReport = webCrawler.getHtmlReport();
 
         HeaderTranslator headerTranslator = new HeaderTranslator(htmlReport);
-        MarkdownConverter mdConverter = new MarkdownConverter(headerTranslator.translateHeadersInDoc(UserInput.getUserInput().getTargetLanguage()));
-        String mdReport = mdConverter.convertDocument();
 
-        try {
-            Files.writeString(Path.of("report.md"), mdReport);
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        MarkdownConverter mdConverter = new MarkdownConverter(
+                headerTranslator.translateHeadersInDoc(
+                        UserInput.getUserInput().getTargetLanguage()));
+
+        FileWriter.writeToFile(mdConverter.convertDocument(), "report.md");
     }
 }
