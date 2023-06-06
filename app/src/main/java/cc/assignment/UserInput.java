@@ -6,7 +6,7 @@ import java.util.Scanner;
 
 public class UserInput {
     private static final UserInput userInput = new UserInput();
-    private List<String> urls;
+    private final List<String> urls;
     private int depth;
     private String targetLanguage;
 
@@ -39,18 +39,21 @@ public class UserInput {
     }
 
     protected void readUrls(Scanner scanner) {
-        String url = "";
+        boolean isFirstUrl = true;
+        String url;
+
         do {
-            System.out.println("Enter URL: ");
+            System.out.println(isFirstUrl ? "Enter URL: " : "Enter another URL or press Enter to continue:");
             url = scanner.nextLine();
             while (this.urls.isEmpty() && !urlIsValid(url)) {
                 System.out.println("Invalid Input. Enter URL: ");
                 url = scanner.nextLine();
             }
-            if (!urlIsEmpty(url)) {
+            if (urlNotEmpty(url)) {
                 this.urls.add(url);
+                isFirstUrl = false;
             }
-        } while (!urlIsEmpty(url));
+        } while (urlNotEmpty(url));
     }
 
     protected void readDepth(Scanner scanner) {
@@ -76,15 +79,12 @@ public class UserInput {
         return urlValidator.urlIsValid();
     }
 
-    protected boolean urlIsEmpty(String url) {
-        return url == null || "".equals(url);
+    protected boolean urlNotEmpty(String url) {
+        return url != null && !"".equals(url);
     }
 
     protected boolean depthIsValid(int depth) {
-        if (depth < 1 || depth > 100) {
-            return false;
-        }
-        return true;
+        return depth >= 1 && depth <= 100;
     }
 
     protected boolean targetLanguageIsValid(String targetLanguage) {

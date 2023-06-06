@@ -13,23 +13,23 @@ class UserInputTest {
 
     @BeforeEach
     void setUp() {
-        System.setIn(new ByteArrayInputStream("https://www.google.at\n3\nGerman".getBytes()));
+        System.setIn(new ByteArrayInputStream("https://www.google.at\n\n3\nGerman".getBytes()));
         userInput = UserInput.getUserInput();
     }
 
-    private void setUptTestReadUrlValid() {
-        System.setIn(new ByteArrayInputStream("https://www.google.at".getBytes()));
+    private void setUpTestReadUrlValid() {
+        System.setIn(new ByteArrayInputStream("https://www.google.at\n\n".getBytes()));
         userInput.readUrls(new Scanner(System.in));
     }
 
     @Test
     void testReadUrlValid() {
-        setUptTestReadUrlValid();
+        setUpTestReadUrlValid();
         assertEquals("https://www.google.at", userInput.getUrls().get(0));
     }
 
     private void setUpTestReadUrlInvalidThenValid() {
-        System.setIn(new ByteArrayInputStream("https://at.google.www\nhttps://www.google.at".getBytes()));
+        System.setIn(new ByteArrayInputStream("https://at.google.www\nhttps://www.google.at\n\n".getBytes()));
         userInput.readUrls(new Scanner(System.in));
     }
 
