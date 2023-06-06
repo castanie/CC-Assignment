@@ -43,11 +43,13 @@ public class UserInput {
         do {
             System.out.println("Enter URL: ");
             url = scanner.nextLine();
-            while (!urlIsValid(url)) {
+            while (this.urls.isEmpty() && !urlIsValid(url)) {
                 System.out.println("Invalid Input. Enter URL: ");
                 url = scanner.nextLine();
             }
-            this.urls.add(url);
+            if (!urlIsEmpty(url)) {
+                this.urls.add(url);
+            }
         } while (!urlIsEmpty(url));
     }
 

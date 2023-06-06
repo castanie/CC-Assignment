@@ -1,6 +1,5 @@
 package cc.assignment;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,24 +19,24 @@ class UserInputTest {
 
     private void setUptTestReadUrlValid() {
         System.setIn(new ByteArrayInputStream("https://www.google.at".getBytes()));
-        userInput.readUrl(new Scanner(System.in));
+        userInput.readUrls(new Scanner(System.in));
     }
 
     @Test
     void testReadUrlValid() {
         setUptTestReadUrlValid();
-        assertEquals("https://www.google.at", userInput.getUrl());
+        assertEquals("https://www.google.at", userInput.getUrls().get(0));
     }
 
     private void setUpTestReadUrlInvalidThenValid() {
         System.setIn(new ByteArrayInputStream("https://at.google.www\nhttps://www.google.at".getBytes()));
-        userInput.readUrl(new Scanner(System.in));
+        userInput.readUrls(new Scanner(System.in));
     }
 
     @Test
     void testReadUrlInvalidThenValid() {
         setUpTestReadUrlInvalidThenValid();
-        assertEquals("https://www.google.at", userInput.getUrl());
+        assertEquals("https://www.google.at", userInput.getUrls().get(0));
     }
 
     private void setUpTestReadDepthValid() {
@@ -117,6 +116,5 @@ class UserInputTest {
     void testTargetLanguageIsValidEmpty() {
         assertFalse(userInput.targetLanguageIsValid(""));
     }
-
 
 }
