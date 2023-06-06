@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class WebCrawler {
+public class PageCrawler {
     private final String url;
     private final Integer depth;
     private final Document document;
@@ -18,22 +18,18 @@ public class WebCrawler {
 
     // --------------------------------
 
-    public WebCrawler(ExecutorService executor, String url, int depth) {
+    public PageCrawler(ExecutorService executor, String url, int depth) {
         this.url = url;
         this.depth = depth;
         this.document = this.loadHtmlDocument();
         this.executor = executor;
     }
 
-    public WebCrawler(ExecutorService executor, String url) {
-        this(executor, url, 2);
-    }
-
     private Document loadHtmlDocument() {
         try {
             return Jsoup.connect(this.url).get();
         } catch (Exception e) {
-            ErrorLogger errorLogger = new ErrorLoggerAdapter(WebCrawler.class);
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(PageCrawler.class);
             errorLogger.logError("Error loading HTML Document: " + e.getMessage());
             return new Document(this.url);
         }
@@ -68,7 +64,7 @@ public class WebCrawler {
         try {
             this.executor.invokeAll(generateAsyncLoadingTasks(elements));
         } catch (Exception e) {
-            ErrorLogger errorLogger = new ErrorLoggerAdapter(WebCrawler.class);
+            ErrorLogger errorLogger = new ErrorLoggerAdapter(PageCrawler.class);
             errorLogger.logError("Error invoking async tasks for embedding linked HTML documents: " + e.getMessage());
         }
     }
@@ -109,7 +105,7 @@ public class WebCrawler {
         if (!urlValidator.urlNotBroken()) {
             flagLinkAsBroken(anchor);
         }
-        WebCrawler crawler = new WebCrawler(this.executor, url, this.depth - 1);
+        PageCrawler crawler = new PageCrawler(this.executor, url, this.depth - 1);
         container.appendChildren(crawler.getHtmlReportElements());
     }
 

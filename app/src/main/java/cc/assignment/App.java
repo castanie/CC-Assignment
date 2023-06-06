@@ -3,27 +3,14 @@
  */
 package cc.assignment;
 
-import java.util.concurrent.Executors;
-
 import org.jsoup.nodes.Document;
 
 public class App {
     public static void main(String[] args) {
         UserInput userInput = UserInput.getUserInput();
-
-        WebCrawler webCrawler = new WebCrawler(
-                Executors.newCachedThreadPool(),
-                userInput.getUrl(),
-                userInput.getDepth());
-
-        Document htmlReport = webCrawler.getHtmlReport();
-
-        HeaderTranslator headerTranslator = new HeaderTranslator(htmlReport);
-
-        MarkdownConverter mdConverter = new MarkdownConverter(
-                headerTranslator.translateHeadersInDoc(
-                        UserInput.getUserInput().getTargetLanguage()));
-
-        FileWriter.writeToFile(mdConverter.convertDocument(), "report.md");
+        Document htmlReport = new ConcurrentCrawler().generateHtmlReport(userInput.getUrls(), userInput.getDepth());
+        htmlReport = new HeaderTranslator(htmlReport).translateHeadersInDoc(userInput.getTargetLanguage());
+        String mdReport = new MarkdownConverter(htmlReport).convertDocument();
+        FileWriter.writeToFile(mdReport, "report.md");
     }
 }

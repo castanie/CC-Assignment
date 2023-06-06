@@ -13,18 +13,18 @@ public class WebCrawlerTest {
     @Nested
     protected class Example {
 
-        private WebCrawler webCrawler;
+        private PageCrawler pageCrawler;
 
         @BeforeEach
         protected void beforeEach() {
             ExecutorService executor = Executors.newCachedThreadPool();
-            this.webCrawler = new WebCrawler(executor, "https://example.com/", 1);
+            this.pageCrawler = new PageCrawler(executor, "https://example.com/", 1);
         }
 
         @Test
         @DisplayName("Basic call to getReport()")
         protected void testCrawl() {
-            Document report = this.webCrawler.getHtmlReport();
+            Document report = this.pageCrawler.getHtmlReport();
             System.out.println(report.body());
         }
     }
@@ -32,18 +32,18 @@ public class WebCrawlerTest {
     @Nested
     protected class Waldhalla {
 
-        private WebCrawler webCrawler;
+        private PageCrawler pageCrawler;
 
         @BeforeEach
         protected void beforeEach() {
             ExecutorService executor = Executors.newCachedThreadPool();
-            this.webCrawler = new WebCrawler(executor, "https://waldhalla.com/", 1);
+            this.pageCrawler = new PageCrawler(executor, "https://waldhalla.com/", 1);
         }
 
         @Test
         @DisplayName("Basic call to getReport()")
         protected void testCrawl() {
-            Document report = this.webCrawler.getHtmlReport();
+            Document report = this.pageCrawler.getHtmlReport();
             System.out.println(report.body());
         }
     }
